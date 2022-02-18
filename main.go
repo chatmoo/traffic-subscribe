@@ -20,8 +20,6 @@ func main() {
 
 	// 注册实例
 	var svc = reg.ServiceParam{
-		Ip:          "172.16.100.30",
-		Port:        8080,
 		ServiceName: "traffic-subscriber",
 		GroupName:   "Userview",
 		Weight:      30,

@@ -11,6 +11,7 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/model"
+	"github.com/nacos-group/nacos-sdk-go/v2/util"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 )
 
@@ -23,8 +24,8 @@ func ClientRegisterInstance(nacos []string, svc ServiceParam) {
 	namingClient, _ := getNamingClient(nacos)
 	// create namingClient Register Param
 	param := vo.RegisterInstanceParam{
-		Ip:          svc.Ip,
-		Port:        svc.Port,
+		Ip:          util.LocalIP(),
+		Port:        8080,
 		ServiceName: svc.ServiceName,
 		GroupName:   svc.GroupName,
 		ClusterName: svc.ClusterName,
@@ -48,7 +49,7 @@ func ClientSubscribeService(nacos []string, svc ServiceParam) {
 		Clusters:    []string{svc.ClusterName},
 		GroupName:   svc.GroupName,
 		SubscribeCallback: func(services []model.Instance, err error) {
-			log.Printf("\n\n callback return services:%s \n\n", services)
+			log.Printf("\n\n callback return services:%s \n\n", util.ToJsonString(services))
 		},
 	}
 
@@ -67,7 +68,7 @@ func ClientUnsubscribeService(nacos []string, svc ServiceParam) {
 		Clusters:    []string{svc.ClusterName},
 		GroupName:   svc.GroupName,
 		SubscribeCallback: func(services []model.Instance, err error) {
-			log.Printf("\n\n callback return services:%s \n\n", services)
+			log.Printf("\n\n callback return services:%s \n\n", util.ToJsonString(services))
 		},
 	}
 	if err := namingClient.Unsubscribe(&param); err != nil {
